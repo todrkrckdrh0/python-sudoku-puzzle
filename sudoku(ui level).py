@@ -92,6 +92,7 @@ def erase(sudoku):
 margin = 20
 side = 50
 Width = Height = margin * 2 + side * 9
+switch_values(sudoku)
 ans = copy.deepcopy(sudoku)
 slist_puzzle = erase(sudoku)
 slist_init = []
@@ -118,20 +119,21 @@ class SudokuUI(Frame):
     def centerWindow(self):
         sw = self.master.winfo_screenwidth()
         sh = self.master.winfo_screenheight()
-        self.master.geometry('%dx%d+%d+%d' % (Width, Height + 200, (sw - Width) / 2, (sh - Height - 200) / 2))
+        self.master.geometry('%dx%d+%d+%d' % (Width, Height + 160, (sw - Width) / 2, (sh - Height - 160) / 2))
 
     def __initUI(self):
         self.pack(fill = 'both', side = 'top')
         self.canvas = Canvas(self, width = Width, height = Height)
         self.canvas.pack(fill = 'both', side = 'top')
-        HowTo = Label(self, text = '''
-        스도쿠는 가로, 세로, 3x3 박스 안의 9개 칸에 1~9의 숫자를
-        중복되지 않게 채워 넣는 게임입니다.
-        네모칸들을 클릭한 후 키보드판의 숫자 키를 눌러 숫자를 입력할 수 있습니다.
-        1~9와 0을 입력할 수 있으며, 0은 공백으로 처리됩니다
-        처음에 이미 주어진 값(파란색 글씨)은 바꿀 수 없으며,
-        중복된 숫자는 빨간색 글씨로 표시됩니다.''', width = Width)
-        HowTo.pack(fill = 'both', side = 'top')
+        HowTo = Label(root, text = '''
+스도쿠는 가로, 세로, 3x3 박스 안의 9개 칸에 1~9의 숫자를
+중복되지 않게 채워 넣는 게임입니다.
+네모칸들을 클릭한 후 키보드판의 숫자 키를 눌러 숫자를 입력할 수 있습니다.
+1~9와 0을 입력할 수 있으며, 0은 공백으로 처리됩니다
+처음에 이미 주어진 값(파란색 글씨)은 바꿀 수 없으며,
+중복된 숫자는 빨간색 글씨로 표시됩니다.''')
+        HowTo.place(x = 0, y = 490, width = Width, height = 110)
+        #HowTo.pack(side = 'bottom')
         self.centerWindow()
         self.__draw_grid()
         self.__draw_puzzle()
@@ -260,10 +262,7 @@ s=0; m=0; h=0
 def Run():
     global s, m, h
     w.delete('all')
-    w.create_text(
-        [Width / 2, 50], anchor=CENTER, text="타이머: %s:%s:%s" % (h, m, s)
-    )
-
+    w.create_text([Width / 2, 10], text='타이머: %02d:%02d:%02d' % (h, m, s))
     if s == 60:
         m += 1;
         s = 0
@@ -278,9 +277,10 @@ if __name__ == '__main__':
     print(ans)
     root = Tk()
     root.title("스도쿠")
-    root.resizable(False, False)
+    #root.resizable(False, False)
+    w = Canvas(root, width = Width, height=25)
+    w.pack(side = 'bottom')
     SudokuUI(root)
-    w = Canvas(root, width = Width, height = 100)
-    w.pack(side = 'top')
+    #w.place(x = 0, y = 200, rely = 0.5)
     root.after(1, Run)
     root.mainloop()
