@@ -3,20 +3,17 @@ import tkinter.messagebox, copy, time
 from tkinter import font as tkfont
 from random import randint
 
-def matrix():
+def board():
     return [[0 for _ in range(9)] for _ in range(9)]
 
-def print_sudoku(s):
-    for e in s:
-        print(e, end="\n")
 
-def trasponi(matrice):
-    trasposta = matrix()
-    for i in range(len(matrice)):
-        for j in range(len(matrice)):
-            trasposta[j][i] = matrice[i][j]
-    return trasposta
-def riempi_sudoku():
+def change_row_col(before):
+    after = board()
+    for i in range(len(before)):
+        for j in range(len(before)):
+            after[j][i] = before[i][j]
+    return after
+def init_sudoku():
     solution = [[1, 2, 3, 4, 5, 6, 7, 8, 9], [4, 5, 6, 7, 8, 9, 1, 2, 3], [7, 8, 9, 1, 2, 3, 4, 5, 6],
                 [2, 3, 4, 5, 6, 7, 8, 9, 1], [5, 6, 7, 8, 9, 1, 2, 3, 4], [8, 9, 1, 2, 3, 4, 5, 6, 7],
                 [3, 4, 5, 6, 7, 8, 9, 1, 2], [6, 7, 8, 9, 1, 2, 3, 4, 5], [9, 1, 2, 3, 4, 5, 6, 7, 8]]
@@ -45,9 +42,9 @@ def riempi_sudoku():
 def switch_row(solution, row1, row2, i, j):
     while (row2 == row1):
         row2 = randint(i, j)
-    tmp = solution[row1]
+    k = solution[row1]
     solution[row1] = solution[row2]
-    solution[row2] = tmp
+    solution[row2] = k
 
     return solution
 
@@ -55,15 +52,21 @@ def switch_row(solution, row1, row2, i, j):
 def switch_column(solution, row1, row2, i, j):
     while (row2 == row1):
         row2 = randint(i, j)
-    solution = trasponi(solution)
-    tmp = solution[row1]
+    solution = change_row_col(solution)
+    k = solution[row1]
     solution[row1] = solution[row2]
-    solution[row2] = tmp
+    solution[row2] = k
 
     return solution
 
-sudoku = riempi_sudoku()
+sudoku = init_sudoku()
 
+def erase(sudoku):
+    for i in range(60):
+        row = randint(0,8)
+        column = randint(0,8)
+        sudoku[row][column] = 0
+    return sudoku
 
 def switch_values(sudoku):
     conta = 0
@@ -81,23 +84,14 @@ def switch_values(sudoku):
                     sudoku[i][j]=value1
         conta+=1
     return sudoku
-
-def erase(sudoku):
-    for i in range(60):
-        row = randint(0,8)
-        column = randint(0,8)
-        sudoku[row][column] = 0
-    return sudoku
-
+switch_values(sudoku)
 margin = 20
 side = 50
 Width = Height = margin * 2 + side * 9
-switch_values(sudoku)
 ans = copy.deepcopy(sudoku)
 slist_puzzle = erase(sudoku)
 slist_init = []
 slist_check = []
-victory = 0
 for i in range(1,10):
     slist_init.append([0]*9)
     slist_check.append([0]*9)
