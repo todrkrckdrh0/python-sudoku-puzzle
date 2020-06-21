@@ -1,5 +1,5 @@
 from tkinter import *
-import tkinter.messagebox, copy, time
+import tkinter.messagebox
 from tkinter import font as tkfont
 from random import randint
 
@@ -88,7 +88,6 @@ switch_values(sudoku)
 margin = 20
 side = 50
 Width = Height = margin * 2 + side * 9
-ans = copy.deepcopy(sudoku)
 slist_puzzle = erase(sudoku)
 slist_init = []
 slist_check = []
@@ -268,13 +267,11 @@ def Run():
     solve = root.after(1000, Run)
 
 if __name__ == '__main__':
-    print(ans)
     root = Tk()
     root.title("스도쿠")
-    #root.resizable(False, False)
+    root.resizable(False, False)
     w = Canvas(root, width = Width, height=25)
     w.pack(side = 'bottom')
     SudokuUI(root)
-    #w.place(x = 0, y = 200, rely = 0.5)
     root.after(1, Run)
     root.mainloop()
