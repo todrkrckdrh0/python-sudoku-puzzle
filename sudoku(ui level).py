@@ -104,7 +104,6 @@ for i in range(9):
 class SudokuUI(Frame):
 
     def __init__(self, parent):
-        self.start = time.time()
         super(SudokuUI, self).__init__()
         self.row, self.col = -1, -1
         self.__initUI()
