@@ -152,7 +152,10 @@ class SudokuUI(Frame):
         self.canvas.delete("numbers")
         for i in range(9):
             for j in range(9):
-                font = tkfont.Font(root=self.canvas, size=24, weight = "bold")
+                slist_check[i][j] = 0
+        font = tkfont.Font(root=self.canvas, size=24, weight = "bold")
+        for i in range(9):
+            for j in range(9):
                 self.check_wrong(i, j)
                 answer = slist_puzzle[i][j]
                 if answer != 0:
@@ -207,32 +210,22 @@ class SudokuUI(Frame):
         self.__draw_puzzle()
 
     def check_wrong(self, x, y):
-        for i in range(9):
-            for j in range(9):
-                slist_check[i][j] = 0
         rowCheck = []
         colCheck = []
         boxCheck = []
-        if self.row >= 0 and self.col >= 0:
-            for i in range(9):
-                rowCheck.append(slist_puzzle[x][i])
-                colCheck.append(slist_puzzle[i][y])
-            for j in range(3):
-                for k in range(3):
-                    boxCheck.append(slist_puzzle[x//3*3+j][y//3*3+k])
+        for i in range(9):
+            rowCheck.append(slist_puzzle[x][i])
+            colCheck.append(slist_puzzle[i][y])
+        for j in range(3):
+            for k in range(3):
+                boxCheck.append(slist_puzzle[x//3*3+j][y//3*3+k])
         for i in range(1,10):
-            if rowCheck.count(i) > 1:
-                for j in range(9):
-                    if rowCheck[j] == i:
-                        slist_check[x][j] = -1
-            if colCheck.count(i) > 1:
-                for j in range(9):
-                    if colCheck[j] == i:
-                        slist_check[j][y] = -1
-            if boxCheck.count(i) > 1:
-                for j in range(9):
-                    if boxCheck[j] == i:
-                        slist_check[x//3*3+j//3][y//3*3+j%3] = -1
+            if rowCheck.count(i) > 1 and slist_puzzle[x][y] == i:
+                slist_check[x][y] = -1
+            if colCheck.count(i) > 1 and slist_puzzle[x][y] == i:
+                slist_check[x][y] = -1
+            if boxCheck.count(i) > 1 and slist_puzzle[x][y] == i:
+                slist_check[x][y] = -1
 
     def check_victory(self):
         for r in range(9):
